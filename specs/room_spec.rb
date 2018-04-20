@@ -15,7 +15,7 @@ class RoomTest < MiniTest::Test
     @guest2 = Guest.new("Ali", "Animal Nitrate", 30)
     @guest3 = Guest.new("Eilidh", "Baa Baa Black Sheep", 10)
 
-    @room1 = Room.new("Rock", [], 0, ["Disarm", "Home", "Piano Man"], 15)
+    @room1 = Room.new("Rock", [], 0, ["Disarm", "Home", "Animal Nitrate"], 15)
     @room2 = Room.new("Pop", [], 0, ["Wuthering Heights", "Night Fever", "Suspicious Minds"], 10)
 
   end
@@ -69,6 +69,11 @@ class RoomTest < MiniTest::Test
   def test_guest_pay_entry_fee__insufficient_funds
     payment = @room1.guest_pay_entry(@guest3)
     assert_equal("Sorry, you don't have enough funds for this room!", payment)
+  end
+
+  def test_does_room_play_favourite_song__yes
+    play_song = @room1.play_fav_song(@guest2)
+    assert_equal("WoooHooooo!!!", play_song)
   end
 
 

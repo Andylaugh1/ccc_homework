@@ -50,4 +50,14 @@ class Room
     end
   end
 
+  def play_fav_song(guest)
+    for song in @playlist
+      if @playlist.include?(guest.fav_song)
+        return "WoooHooooo!!!"
+      else
+        "That sucks"
+      end
+    end
+  end
+
 end
