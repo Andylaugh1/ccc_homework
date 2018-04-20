@@ -1,14 +1,15 @@
 class Room
 
-  attr_reader :name, :capacity
+  attr_reader :name, :capacity, :entry_fee
   attr_accessor :guests, :playlist
 
-  def initialize(name, guests, capacity, playlist)
+  def initialize(name, guests, capacity, playlist, entry_fee)
 
     @name = name
     @guests = []
     @capacity = capacity
     @playlist = playlist
+    @entry_fee = entry_fee
 
   end
 
@@ -32,9 +33,21 @@ class Room
     end
   end
 
-  def check_in_fail(guest)
-    if @guests.length < @capcity
-      @guest.add
+  def check_in_capacity(guest)
+    if @guests.length < @capcity.to_i
+      check_in_guest(guest)
+    else
+      return "Sorry this room is already full, try the other room"
+    end
+  end
+
+  def guest_pay_entry(guest)
+    if guest.money >= @entry_fee
+      check_in_guest(guest)
+      guest.money -= @entry_fee
+    else
+      return "Sorry, you don't have enough funds for this room!"
+    end
   end
 
 end

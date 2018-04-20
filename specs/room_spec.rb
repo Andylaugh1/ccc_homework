@@ -11,12 +11,12 @@ class RoomTest < MiniTest::Test
     @song1 = Song.new("Serenata Immortale")
     @song2 = Song.new("You Know My Name")
 
-    @guest1 = Guest.new("Andy", "Thunder Road")
-    @guest2 = Guest.new("Ali", "Animal Nitrate")
-    @guest3 = Guest.new("Eilidh", "Baa Baa Black Sheep")
+    @guest1 = Guest.new("Andy", "Thunder Road", 20)
+    @guest2 = Guest.new("Ali", "Animal Nitrate", 30)
+    @guest3 = Guest.new("Eilidh", "Baa Baa Black Sheep", 10)
 
-    @room1 = Room.new("Rock", [], 2, ["Disarm", "Home", "Piano Man"])
-    @room2 = Room.new("Pop", [], 2, ["Wuthering Heights", "Night Fever", "Suspicious Minds"])
+    @room1 = Room.new("Rock", [], 0, ["Disarm", "Home", "Piano Man"], 15)
+    @room2 = Room.new("Pop", [], 0, ["Wuthering Heights", "Night Fever", "Suspicious Minds"], 10)
 
   end
 
@@ -25,7 +25,7 @@ class RoomTest < MiniTest::Test
   end
 
   def test_get_capacity
-    assert_equal(3, @room1.capacity)
+    assert_equal(0, @room1.capacity)
   end
 
   def test_get_guests
@@ -51,9 +51,24 @@ class RoomTest < MiniTest::Test
     assert_equal(4, @room2.playlist.length)
   end
 
-  def test_check_in_fail_capacity_max
-    failed_check_in = @room1.check_in_fail(@guest1)
+  def test_check_in_capacity_fail
+    failed_check_in = @room1.check_in_capacity(@guest1)
     assert_equal("Sorry this room is already full, try the other room", failed_check_in)
+  end
+
+  def test_check_in_capacity_pass
+    checked_in = @room2.check_in_capacity(@guest2)
+    assert_equal("Ali", @guest2.name)
+  end
+
+  def test_guest_pay_entry_fee__sufficient_funds
+    payment = @room1.guest_pay_entry(@guest1)
+    assert_equal(5, @guest1.money)
+  end
+
+  def test_guest_pay_entry_fee__insufficient_funds
+    payment = @room1.guest_pay_entry(@guest3)
+    assert_equal("Sorry, you don't have enough funds for this room!", payment)
   end
 
 
