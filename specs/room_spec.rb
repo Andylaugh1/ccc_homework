@@ -3,10 +3,13 @@ require('minitest/rg')
 require_relative('../room.rb')
 require_relative('../guest.rb')
 require_relative('../song.rb')
+require_relative('../bar.rb')
 
 class RoomTest < MiniTest::Test
 
   def setup
+
+    @bar1 = Bar.new(3, 7)
 
     @song1 = Song.new("Serenata Immortale")
     @song2 = Song.new("You Know My Name")
@@ -15,8 +18,8 @@ class RoomTest < MiniTest::Test
     @guest2 = Guest.new("Ali", "Animal Nitrate", 30)
     @guest3 = Guest.new("Eilidh", "Baa Baa Black Sheep", 10)
 
-    @room1 = Room.new("Rock", [], 0, ["Disarm", "Home", "Animal Nitrate"], 15)
-    @room2 = Room.new("Pop", [], 0, ["Wuthering Heights", "Night Fever", "Suspicious Minds"], 10)
+    @room1 = Room.new("Rock", [], 0, ["Disarm", "Home", "Animal Nitrate"], 15, 0)
+    @room2 = Room.new("Pop", [@guest2, @guest3], 0, ["Wuthering Heights", "Night Fever", "Suspicious Minds"], 10, 10)
 
   end
 
@@ -76,5 +79,24 @@ class RoomTest < MiniTest::Test
     assert_equal("WoooHooooo!!!", play_song)
   end
 
+  def test_add_drink_to_room_bar_tab
+    add_drink = @room1.bar_tab += @bar1.drink_price
+    assert_equal(3, @room1.bar_tab)
+  end
 
+  def test_add_food_to_room_bar_tab
+    add_food = @room2.bar_tab += @bar1.food_price
+    assert_equal(17, @room2.bar_tab)
+  end
+
+  def test_guest_pay_bar_bill__guest_present
+    pay_bill = @room2.guest_pay_bill()
+    assert_equal(25, @guest2.money)
+    assert_equal(5, @guest3.money)
+  end
+
+  def test_guest_pay_bar_bill__no_guest
+    avoid_bill = @room1.guest_pay_bill()
+    assert_equal("The guests have run away without paying!!", avoid_bill)
+  end
 end

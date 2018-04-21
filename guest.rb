@@ -8,7 +8,7 @@ class Guest
     @name = name
     @fav_song = fav_song
     @money = money
-
   end
+
 
 end

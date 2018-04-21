@@ -1,15 +1,16 @@
 class Room
 
   attr_reader :name, :capacity, :entry_fee
-  attr_accessor :guests, :playlist
+  attr_accessor :guests, :playlist, :bar_tab
 
-  def initialize(name, guests, capacity, playlist, entry_fee)
+  def initialize(name, guests=[], capacity, playlist, entry_fee, bar_tab)
 
     @name = name
-    @guests = []
+    @guests = guests
     @capacity = capacity
     @playlist = playlist
     @entry_fee = entry_fee
+    @bar_tab = bar_tab
 
   end
 
@@ -60,4 +61,24 @@ class Room
     end
   end
 
+  def guest_buy_drink(bar)
+    @bar_tab += bar.drink_price
+  end
+
+  def guest_buy_food(bar)
+    @bar_tab += bar.food_price
+  end
+
+  def guest_pay_bill()
+    split = @guests.length
+    if @guests.length == 0
+      return "The guests have run away without paying!!"
+    else
+      bill = @bar_tab / split
+      @guests.each { |g|
+      g.money -= bill
+      }
+    end
+    @bar_tab = 0
+  end
 end
